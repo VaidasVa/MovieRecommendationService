@@ -1,0 +1,23 @@
+server:
+  port: 8081
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  datasource:
+    url: jdbc:mysql://localhost:3306/movies
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  flyway:
+    schemas: movies
+    baselineOnMigrate: true
+    baselineVersion: 1
+    target: latest
+    database: mysql
