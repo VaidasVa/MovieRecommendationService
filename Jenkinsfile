@@ -1,21 +1,25 @@
 pipeline {
-
     agent any
 
-    tools{
-        maven 'maven'
+    tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+        maven "maven"
     }
 
     stages {
         stage('Build') {
             steps {
-                git 'https://github.com/VaidasVa/MovieRecommendationService.git'
-                sh 'maven clean package'
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']],
+                doGenerateSubmoduleConfigurations: false,
+                extensions: [], submoduleCfg: [],
+                userRemoteConfigs: [[url: 'https://github.com/VaidasVa/MovieRecommendationService.git']]])
+
+                bat "mvn clean install -DskipTests=true"
             }
         }
-        stage('Test') {
-            steps {
-                sh 'maven test'
+        stage('Test'){
+            steps{
+                bat "mvn clean install -DskipTests=true"
             }
         }
     }
