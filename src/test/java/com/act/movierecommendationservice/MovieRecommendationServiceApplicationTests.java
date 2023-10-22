@@ -32,7 +32,6 @@ class MovieRecommendationServiceApplicationTests {
         assertTrue("MovieController is not null", movieController != null);
         assertTrue("RecommendationsService is not null", recommendationsService != null);
         assertTrue("RecommendationsController is not null", recommendationsController != null);
-
     }
 
 }
