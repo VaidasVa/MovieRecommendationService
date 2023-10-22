@@ -18,8 +18,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-// todo add logger
-
 /**
  * Service class for recommendations based on:
  * (1) just watched movie (by its id) and
@@ -101,7 +99,7 @@ public class RecommendationsServiceImpl implements RecommendationsService {
             return repository.findAllByGenreIs(popularGenre)
                     .stream().map(mapper::movieDAOtoMovie).limit(5).toList();
         } else {
-            return repository.findAllByOrderByAvgUserRating().stream().map(mapper::movieDAOtoMovie).toList().subList(0, 5);
+            return repository.findAllByOrderByAvgUserRating().stream().limit(5).map(mapper::movieDAOtoMovie).toList();
         }
     }
 }

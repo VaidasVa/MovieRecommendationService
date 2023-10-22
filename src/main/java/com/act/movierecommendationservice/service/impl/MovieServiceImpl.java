@@ -17,8 +17,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-// todo add logger
-
 /**
  * Basic CRUD for movie object + movie rating methods
  * Wanted to try out CompletableFuture, therefore some methods are implemented with it
@@ -30,6 +28,8 @@ public class MovieServiceImpl implements MovieService {
 
     private final MovieRepository repository;
     private final MovieMapper mapper;
+
+    private static final String MESSAGE = "Movie not found";
 
     /**
      * Returns all movies in the database
@@ -57,7 +57,7 @@ public class MovieServiceImpl implements MovieService {
         return CompletableFuture.supplyAsync(() ->
                 Optional.ofNullable(repository.findById(id)
                         .map(mapper::movieDAOtoMovie)
-                        .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Movie not found"))));
+                        .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, MESSAGE))));
     }
 
     /**
@@ -89,8 +89,6 @@ public class MovieServiceImpl implements MovieService {
                         item.getReleaseYear() == movie.getReleaseYear()))
                 .map(mapper::movieDAOtoMovie)
                 .findFirst();
-
-        System.out.println(existingMovie);
 
         if (existingMovie.isEmpty()) {
             movie.setId(UUID.randomUUID().toString());
@@ -138,7 +136,7 @@ public class MovieServiceImpl implements MovieService {
                     found.setRatingsTotalAmount(found.getRatingsTotalAmount() + 1);
                     updateMovie(mapper.movieDAOtoMovie(found));
                 }, () -> {
-                    throw new ResponseStatusException(NOT_FOUND, "Movie not found");
+                    throw new ResponseStatusException(NOT_FOUND, MESSAGE);
                 });
     }
 
@@ -150,8 +148,9 @@ public class MovieServiceImpl implements MovieService {
      */
     @Override
     public double getRating(String id) {
-        if (repository.existsById(id)) return repository.findById(id).get().getAvgUserRating();
-        else throw new ResponseStatusException(NOT_FOUND, "Movie not found");
+        if (repository.existsById(id)) {
+            return repository.findById(id).get().getAvgUserRating();
+        } else throw new ResponseStatusException(NOT_FOUND, MESSAGE);
     }
 
     /**

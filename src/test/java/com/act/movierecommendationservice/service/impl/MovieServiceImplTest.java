@@ -109,14 +109,11 @@ class MovieServiceImplTest {
         when(repository.findById(movieId))
                 .thenReturn(Optional.empty());
 
-        CompletionException completionException = assertThrows(CompletionException.class, () -> {
-            CompletableFuture<Optional<Movie>> result = service.getMovieById(movieId);
-            result.join();
-        });
+        CompletionException completionException = assertThrows(CompletionException.class, () ->
+            service.getMovieById(movieId).join());
 
         Throwable cause = completionException.getCause();
         assertEquals(ResponseStatusException.class, cause.getClass());
-
 
         ResponseStatusException responseStatusException = (ResponseStatusException) cause;
         assertEquals(404, responseStatusException.getBody().getStatus());
@@ -199,8 +196,8 @@ class MovieServiceImplTest {
 
         service.rateMovie(rateThisMovie.getId(), 5);
 
-        assertEquals(ratedMovie.getAvgUserRating(), 5);
-        assertEquals(ratedMovie.getRatingsTotalAmount(), 1);
+        assertEquals(5,ratedMovie.getAvgUserRating());
+        assertEquals(1, ratedMovie.getRatingsTotalAmount());
     }
 
     @Test
