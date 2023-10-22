@@ -30,7 +30,6 @@ public class MovieServiceImpl implements MovieService {
 
     private final MovieRepository repository;
     private final MovieMapper mapper;
-    private String id;
 
     /**
      * Returns all movies in the database
@@ -161,7 +160,7 @@ public class MovieServiceImpl implements MovieService {
      * @param id - movie ID
      */
     @Override
-    public void deleteMove(String id) {
+    public void deleteMovie(String id) {
         if (repository.existsById(id)) {
             repository.deleteById(id);
         } else throw new ResponseStatusException(NOT_FOUND);

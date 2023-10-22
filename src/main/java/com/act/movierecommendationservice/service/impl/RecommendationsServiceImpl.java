@@ -85,7 +85,8 @@ public class RecommendationsServiceImpl implements RecommendationsService {
         List<String> genres = new ArrayList<>();
         if (!history.isEmpty()) {
             for (String movieID : history) {
-                genres.add(repository.findById(movieID).get().getGenre());
+                Optional<Movie> movie = repository.findById(movieID).map(mapper::movieDAOtoMovie);
+                movie.ifPresent(item -> genres.add(item.getGenre()));
             }
 
             Map<String, Long> genreCount = genres.stream()
@@ -96,10 +97,9 @@ public class RecommendationsServiceImpl implements RecommendationsService {
                             .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()));
 
             String popularGenre = sorted.toList().get(0).getKey();
-            System.out.println(popularGenre);
 
             return repository.findAllByGenreIs(popularGenre)
-                    .stream().map(mapper::movieDAOtoMovie).toList();
+                    .stream().map(mapper::movieDAOtoMovie).limit(5).toList();
         } else {
             return repository.findAllByOrderByAvgUserRating().stream().map(mapper::movieDAOtoMovie).toList().subList(0, 5);
         }

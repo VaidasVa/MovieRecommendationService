@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public interface MovieService {
-
     CompletableFuture<Optional<List<Movie>>> getAllMovies();
 
     CompletableFuture<Optional<Movie>> getMovieById(String id);
@@ -22,5 +21,5 @@ public interface MovieService {
 
     double getRating(String id);
 
-    void deleteMove(String id);
+    void deleteMovie(String id);
 }
