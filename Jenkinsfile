@@ -19,7 +19,7 @@ pipeline {
         }
         stage('Test'){
             steps{
-                bat "mvn clean install -DskipTests=true"
+                bat "mvn test"
             }
         }
     }
