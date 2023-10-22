@@ -28,15 +28,17 @@ public class RecommendationsController {
             List<Movie> movies = service.getRecommendationsBasedOnJustWatchedMovie(movieId);
             return new ResponseEntity<>(movies, HttpStatus.OK);
         } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
     }
 
     @GetMapping("/history")
-    public ResponseEntity<List<Movie>> getRecommendationsBasedOnHistory(@RequestBody List<String> history) {
-        if (history.isEmpty()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        else {
-            List<Movie> movies = service.getRecommendationsBasedOnUserHistory(history);
-            return new ResponseEntity<>(movies, HttpStatus.OK);
+    public ResponseEntity<List<Movie>> getRecommendationsBasedOnHistory(@RequestBody(required = false) List<String> history) {
+        List<Movie> movies;
+        if(history == null || history.isEmpty()) {
+            movies = service.getRecommendationsBasedOnUserHistory(List.of());
         }
+        else {
+            movies = service.getRecommendationsBasedOnUserHistory(history);
+        }
+        return new ResponseEntity<>(movies, HttpStatus.OK);
     }
 }

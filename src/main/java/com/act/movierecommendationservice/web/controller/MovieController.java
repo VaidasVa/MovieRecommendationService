@@ -35,7 +35,7 @@ public class MovieController {
     }
 
     @GetMapping("/title/{title}")
-    private ResponseEntity<Optional<List<Movie>>> getMoviesByTitle(@NonNull @NotBlank @PathVariable String title) {
+    public ResponseEntity<Optional<List<Movie>>> getMoviesByTitle(@NonNull @NotBlank @PathVariable String title) {
         Optional<List<Movie>> movies = service.getMovieByTitle(title).join();
         if (movies.get().isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         else return new ResponseEntity<>(movies, HttpStatus.OK);
@@ -67,7 +67,7 @@ public class MovieController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteMovie(@PathVariable String id) {
-        service.deleteMove(id);
+        service.deleteMovie(id);
         return new ResponseEntity<>("Deleted.", HttpStatus.NO_CONTENT);
     }
 }
