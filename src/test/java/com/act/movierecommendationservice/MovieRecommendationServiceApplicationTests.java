@@ -7,11 +7,13 @@ import com.act.movierecommendationservice.web.controller.RecommendationsControll
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.EnabledIf;
 
 import static org.springframework.test.util.AssertionErrors.assertTrue;
 
 
-@SpringBootTest(properties = "spring.profiles.active=local")
+@SpringBootTest
+@EnabledIf(expression = "#{environment['spring.profiles.active'] == 'local'}", loadContext = true)
 class MovieRecommendationServiceApplicationTests {
 
     @Autowired
@@ -24,6 +26,7 @@ class MovieRecommendationServiceApplicationTests {
     private RecommendationsController recommendationsController;
 
     @Test
+    @EnabledIf(expression = "#{environment['spring.profiles.active'] == 'local'}", loadContext = true)
     void contextLoads() {
         assertTrue("MovieController is not null", movieService != null);
         assertTrue("MovieController is not null", movieController != null);
